@@ -45,9 +45,8 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
             self.response_json(400, json_replay)
 
         except Exception as e:
-            json_replay = responce.to_json("Unknown Erroe", None, version_protocol, "ko", str(e) )
-
-        # Configura l'intestazione della risposta
+            json_replay = responce.to_json("Unknown Error", None, version_protocol, "ko", str(e) )
+            self.response_json(400, json_replay)
 
     def response_json(self, status, json_replay):
 

@@ -22,7 +22,6 @@ command_json = {
     }
 }
 
-
 # Esegui una richiesta POST al server
 response = requests.post(url, json=command_json)
 
@@ -77,10 +76,6 @@ if response_data["answer"]["fields"]["acknowledge"] == "ok":
     response = requests.post(url, "json=command_json")
     print("Risposta dal server in caso del Bad Request:")
     print(response.text)
-
-
-
-
 
 else:
     print("errore")
