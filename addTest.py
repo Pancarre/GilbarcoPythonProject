@@ -41,12 +41,14 @@ def handle_request(json_data, database_name, version_protocol):
             return None
 
     elif json_data['command']['name'] == 'end-test-in-progress':
-        print("111111111111end_endendendendendendend________________________________________")
         if is_test_id_valid(json_data['command']['fields']['test-id'], cursor):
-            print("22222222222222222end_endendendendendendend________________________________________")
-
             cursor.execute("""UPDATE TEST
                                     SET end_time = CURRENT_TIMESTAMP, result = ?
                                     WHERE id = ?;""",
                            (json_data['command']['fields']['result'],
                                         json_data['command']['fields']['test-id']))
+            conn.commit()
+
+
+    else:
+        raise Exception("errore di name")

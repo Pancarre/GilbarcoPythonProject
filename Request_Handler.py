@@ -17,29 +17,50 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
         #riceve richiesta con JSON
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
-        # Decodifica i dati JSON
-        data = json.loads(post_data.decode('utf-8'))
-        # agigungere nel SQLite database
-        name = data['command']['name']
+
         try:
+            # Decodifica i dati JSON
+            data = json.loads(post_data.decode('utf-8'))
+            # agigungere nel SQLite database
+            name = data['command']['name']
+
+
 
             test_id = addTest.handle_request(data, database_name, version_protocol)
             json_replay = responce.to_json(name, test_id, version_protocol, "ok", None)
 
+            self.send_response(200)
+            self.send_header('Content-type', 'text/plain')
+            self.end_headers()
+
+            # Invia il corpo della risposta
+            response_message = json.dumps(json_replay, indent=4, sort_keys=True)
+            self.wfile.write(response_message.encode('utf-8'))
+
+
+        except json.JSONDecodeError as e:
+            # viene mandato un 400 se input non è un json
+            print("errore di decodifica JSON con:" + str(self.client_address))
+
+            self.send_response(400)
+            self.send_header('Content-type', 'text/plain')
+            self.end_headers()
+
+            # creo json per rispondere
+            json_replay = responce.to_json("Bad Request", None, version_protocol, "ko", None)
+
+            # Invia il corpo della risposta
+            response_message = json.dumps(json_replay, indent=4, sort_keys=True)
+            self.wfile.write(response_message.encode('utf-8'))
+
+
         except Exception as e:
-            test_id = None
-            json_replay = responce.to_json(name, test_id, version_protocol, "ko", str(e) )
+            json_replay = responce.to_json(name, None, version_protocol, "ko", str(e) )
 
 
         # Configura l'intestazione della risposta
 
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
 
-        # Invia il corpo della risposta
-        response_message = json.dumps(json_replay, indent=4, sort_keys=True)
-        self.wfile.write(response_message.encode('utf-8'))
 
 
     def do_GET(self):

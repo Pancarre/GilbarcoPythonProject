@@ -74,9 +74,9 @@ if response_data["answer"]["fields"]["acknowledge"] == "ok":
     print("Risposta dal server:")
     print(response.text)
 
-
-
-
+    response = requests.post(url, "json=command_json")
+    print("_____________________Risposta dal server:")
+    print(response.text)
 
 
 
