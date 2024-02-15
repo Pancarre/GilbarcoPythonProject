@@ -1,7 +1,9 @@
 -- Creazione della tabella TEST
 CREATE TABLE IF NOT EXISTS TEST (
     id INTEGER PRIMARY KEY,
-    protocol_version VARCHAR(50),
     env_id INT,
-    test_name VARCHAR(100)
+    test_name VARCHAR(100),
+    start_time TIMESTAMP,
+    end_time TIMESTAMP,
+    result VARCHAR(20)
 );
