@@ -27,7 +27,7 @@ command_json = {
 response = requests.post(url, json=command_json)
 
 # Stampa la risposta ricevuta dal server
-print("Risposta dal server:")
+print("Risposta dal server in caso di new-test:")
 print(response.text)
 
 # Converti la risposta in un dizionario
@@ -53,7 +53,7 @@ if response_data["answer"]["fields"]["acknowledge"] == "ok":
     response = requests.post(url, json=command_json)
 
     # Stampa la risposta ricevuta dal server
-    print("Risposta dal server:")
+    print("Risposta dal server in caso del update-test:")
     print(response.text)
 
     command_json = {
@@ -71,11 +71,11 @@ if response_data["answer"]["fields"]["acknowledge"] == "ok":
     response = requests.post(url, json=command_json)
 
     # Stampa la risposta ricevuta dal server
-    print("Risposta dal server:")
+    print("Risposta dal server in caso di end-test")
     print(response.text)
 
     response = requests.post(url, "json=command_json")
-    print("_____________________Risposta dal server:")
+    print("Risposta dal server in caso del Bad Request:")
     print(response.text)
 
 

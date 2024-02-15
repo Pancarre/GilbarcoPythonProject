@@ -18,7 +18,7 @@ def handle_request(json_data, database_name, version_protocol):
     insert_lock = threading.Lock()
 
     # Esegui l'azione in base al tipo di richiesta
-    #try
+
     if json_data['command']['name'] == 'new-test-in-progress':
             with insert_lock:
                 cursor.execute("""INSERT INTO TEST (env_id, test_name,start_time)

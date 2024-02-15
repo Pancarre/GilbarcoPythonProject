@@ -24,44 +24,40 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
             # agigungere nel SQLite database
             name = data['command']['name']
 
-
-
             test_id = addTest.handle_request(data, database_name, version_protocol)
+
             json_replay = responce.to_json(name, test_id, version_protocol, "ok", None)
 
-            self.send_response(200)
-            self.send_header('Content-type', 'text/plain')
-            self.end_headers()
-
-            # Invia il corpo della risposta
-            response_message = json.dumps(json_replay, indent=4, sort_keys=True)
-            self.wfile.write(response_message.encode('utf-8'))
-
+            self.response_json(200, json_replay)
 
         except json.JSONDecodeError as e:
-            # viene mandato un 400 se input non è un json
+
+            # Invia una risposta 400 Bad Request se il corpo della richiesta non è un JSON valido
             print("errore di decodifica JSON con:" + str(self.client_address))
 
-            self.send_response(400)
-            self.send_header('Content-type', 'text/plain')
-            self.end_headers()
+            json_replay = responce.to_json("Bad Request", None, version_protocol, "ko", str(e))
+            self.response_json(400, json_replay)
 
-            # creo json per rispondere
-            json_replay = responce.to_json("Bad Request", None, version_protocol, "ko", None)
 
-            # Invia il corpo della risposta
-            response_message = json.dumps(json_replay, indent=4, sort_keys=True)
-            self.wfile.write(response_message.encode('utf-8'))
+        except KeyError as e:
 
+            json_replay = responce.to_json("Key Error", None, version_protocol, "ko", str(e))
+            self.response_json(400, json_replay)
 
         except Exception as e:
-            json_replay = responce.to_json(name, None, version_protocol, "ko", str(e) )
-
+            json_replay = responce.to_json("Unknown Erroe", None, version_protocol, "ko", str(e) )
 
         # Configura l'intestazione della risposta
 
+    def response_json(self, status, json_replay):
 
+        self.send_response(status)
+        self.send_header('Content-type', 'text/plain')
+        self.end_headers()
 
+        # Invia il corpo della risposta
+        response_message = json.dumps(json_replay, indent=4, sort_keys=True)
+        self.wfile.write(response_message.encode('utf-8'))
 
     def do_GET(self):
         # Configura l'intestazione della risposta
@@ -71,7 +67,6 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
 
         # Invia il corpo della risposta
         self.wfile.write("Ciao, questo è il server API HTTP!".encode('utf-8'))
-
 
 # Funzione principale per il server
 def main():
@@ -89,7 +84,6 @@ def main():
 
     # Attendi che il thread del server HTTP termini (non succederà mai)
     server_thread.join()
-
 
 if __name__ == "__main__":
     main()
