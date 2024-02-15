@@ -6,7 +6,7 @@ import createDatabase
 import responce
 
 #variabili globali
-database_name = 'mydatabase.db'
+database_name = 'database.db'
 version_protocol = 00.01
 
 createDatabase.create_database(database_name)
@@ -17,17 +17,19 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
         #riceve richiesta con JSON
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
+        # Decodifica i dati JSON
+        data = json.loads(post_data.decode('utf-8'))
+        # agigungere nel SQLite database
+        name = data['command']['name']
         try:
-            # Decodifica i dati JSON
-            data = json.loads(post_data.decode('utf-8'))
-            # agigungere nel SQLite database
 
             #ULTIMA MODIFICA_________________________________________________
-            name , test_id = addTest.handle_request(post_data, database_name, version_protocol)
-            json_replay = responce.to_jason(name, test_id, version_protocol, "ok", None)
+            test_id = addTest.handle_request(data, database_name, version_protocol)
+            json_replay = responce.to_json(name, test_id, version_protocol, "ok", None)
 
         except Exception as e:
-            json_replay = responce.to_jason(name, test_id, version_protocol, "ko", str(e) )
+            test_id = None
+            json_replay = responce.to_json(name, test_id, version_protocol, "ko", str(e) )
 
             #ULTIMA MODIFICA_________________________________________________
 

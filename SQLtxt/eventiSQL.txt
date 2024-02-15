@@ -1,7 +1,7 @@
 -- Creazione della tabella EVENTI_test
 CREATE TABLE IF NOT EXISTS EVENTI_test (
     eventi_id INTEGER PRIMARY KEY,
-    test_id INT,
+    test_id INTEGER,
     test_update TIMESTAMP,
     time_stamp TIMESTAMP,
     other_info VARCHAR(255),

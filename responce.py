@@ -1,9 +1,9 @@
-def to_jason(name, id, version_protocol, ack , error_message):
+def to_json(name, id, version_protocol, ack , error_message):
 
     answer_dict = {
         "answer": {
-            "protocol-version": "00.01",
-            "name": "update-test-in-progress",
+            "protocol-version": version_protocol,
+            "name": name,
             "fields": {
                 "acknowledge": ack,
 
@@ -18,5 +18,3 @@ def to_jason(name, id, version_protocol, ack , error_message):
         answer_dict["answer"]["fields"]["error-message"] = error_message
 
     return answer_dict
-
-
