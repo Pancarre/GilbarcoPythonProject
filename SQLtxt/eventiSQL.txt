@@ -1,4 +1,3 @@
--- Creazione della tabella EVENTI_test
 CREATE TABLE IF NOT EXISTS EVENTI_test (
     eventi_id INTEGER PRIMARY KEY,
     test_id INTEGER,

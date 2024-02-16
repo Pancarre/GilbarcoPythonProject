@@ -17,6 +17,6 @@ def create_database(database_name):
     conn = sqlite3.connect(database_name)
     cursor = conn.cursor()
 
-    print(f"Collegato con il database {database_name}.")
+    print(f"connected with database {database_name}.")
     # Table creation if it does not exist
     create_table(cursor)

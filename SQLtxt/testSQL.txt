@@ -1,4 +1,3 @@
--- Creazione della tabella TEST
 CREATE TABLE IF NOT EXISTS TEST (
     id INTEGER PRIMARY KEY,
     env_id INT,
