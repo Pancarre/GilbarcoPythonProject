@@ -1,22 +1,22 @@
 import sqlite3
 
 def create_table(cursor):
-    # Creazione di tabella test se non esiste
+    # Creating the TEST table if it does not exist
     with open("SQLtxt/testSQL.txt", "r", encoding="utf-8") as testSQL:
         sql_queries = testSQL.read()
         cursor.execute(sql_queries)
 
-    # Creazione di tabella eventi-test se non esiste
+    # Creating the EVENT-test table if it does not exist
     with open("SQLtxt/eventiSQL.txt", "r", encoding="utf-8") as eventiSQL:
         sql_queries = eventiSQL.read()
         cursor.execute(sql_queries)
 
 
 def create_database(database_name):
-    # Connessione o creazione del database SQLite
+    # Connection or creation of the SQLite database
     conn = sqlite3.connect(database_name)
     cursor = conn.cursor()
 
     print(f"Collegato con il database {database_name}.")
-    # Creazione delle tabelle se non esiste
+    # Table creation if it does not exist
     create_table(cursor)

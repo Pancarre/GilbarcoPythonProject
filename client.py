@@ -2,14 +2,17 @@ import json
 
 import requests
 
-# Indirizzo del server HTTP
+
+# This is the client that connects to the server to verify the functionalities.
+
+# HTTP server address
 server_host = 'http://127.0.0.1'
 server_port = 12345
 
-# URL completo per la richiesta POST al server
+# The complete URL for the POST request to the server.
 url = f"{server_host}:{server_port}"
 
-# Dati da inviare nella richiesta POST
+# Data to be sent in the POST request.
 
 command_json = {
     "command": {
@@ -22,14 +25,14 @@ command_json = {
     }
 }
 
-# Esegui una richiesta POST al server
+# Execute a POST request to the server.
 response = requests.post(url, json=command_json)
 
-# Stampa la risposta ricevuta dal server
-print("Risposta dal server in caso di new-test:")
+# Print the response received from the server.
+print("Response from the server in case of a new-test:")
 print(response.text)
 
-# Converti la risposta in un dizionario
+# Convert the response into a dictionary and send other request if acknowledge == ok.
 response_data = json.loads(response.text)
 
 if response_data["answer"]["fields"]["acknowledge"] == "ok":
@@ -48,11 +51,11 @@ if response_data["answer"]["fields"]["acknowledge"] == "ok":
             }
         }
     }
-    # Esegui una richiesta POST al server
+    # Make a POST request to the server.
     response = requests.post(url, json=command_json)
 
-    # Stampa la risposta ricevuta dal server
-    print("Risposta dal server in caso del update-test:")
+    # Print the response received from the server.
+    print("Response from the server in case of a update-test:")
     print(response.text)
 
     command_json = {
@@ -66,16 +69,18 @@ if response_data["answer"]["fields"]["acknowledge"] == "ok":
             }
         }
     }
-    # Esegui una richiesta POST al server
+    # Make a POST request to the server.
     response = requests.post(url, json=command_json)
 
-    # Stampa la risposta ricevuta dal server
-    print("Risposta dal server in caso di end-test")
+    # Print the response received from the server.
+    print("Response from the server in case of a end-test:")
     print(response.text)
 
-    response = requests.post(url, "json=command_json")
-    print("Risposta dal server in caso del Bad Request:")
+    # send a post with no_json.
+
+    response = requests.post(url, "not_json")
+    print("Response from the server in case of a bad request:")
     print(response.text)
 
 else:
-    print("errore")
+    print("error")

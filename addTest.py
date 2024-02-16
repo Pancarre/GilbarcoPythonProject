@@ -2,22 +2,22 @@ import json
 import sqlite3
 import threading
 def is_test_id_valid(test_id, cursor):
-     #funzione per verificare se id soddisfa le condizioni
+     # Function to check if the ID meets the conditions
     cursor.execute("SELECT id FROM TEST WHERE id = ?", (test_id,))
     result = cursor.fetchone()
     if result is None:
-        raise Exception("id non valido")
+        raise Exception("Invalid id")
     return True
 
-def handle_request(json_data, database_name, version_protocol):
+def handle_request(json_data, database_name):
 
     conn = sqlite3.connect(database_name)
     cursor = conn.cursor()
 
-    # Definizione di un blocco per garantire l'accesso sequenziale al database
+    # Definition of a block to ensure sequential access to the database
     insert_lock = threading.Lock()
 
-    # Esegui l'azione in base al tipo di richiesta
+    # Perform the action based on the type of request
 
     if json_data['command']['name'] == 'new-test-in-progress':
             with insert_lock:
@@ -25,7 +25,7 @@ def handle_request(json_data, database_name, version_protocol):
                                         VALUES (?, ?, CURRENT_TIMESTAMP)""",
                             (json_data['command']['fields']['env-id'], json_data['command']['fields']['test-name']))
                 conn.commit()
-                # Ottenere l'ID assegnato all'ultima riga inserita
+                # Get the ID assigned to the last inserted row.
                 cursor.execute("SELECT last_insert_rowid()")
                 assigned_id = cursor.fetchone()[0]
             return assigned_id
@@ -51,4 +51,4 @@ def handle_request(json_data, database_name, version_protocol):
 
 
     else:
-        raise Exception("errore di name")
+        raise Exception("name error")
